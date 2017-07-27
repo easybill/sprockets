@@ -53,8 +53,10 @@ module Sprockets
     #     # ]
     #
     def resolve_with_compat(path, options = {})
+      print "Resolve #{path}..."
+      start = Time.now
       options = options.dup
-      if options.delete(:compat) { true }
+      res = if options.delete(:compat) { true }
         uri, _ = resolve_without_compat(path, options)
         if uri
           path, _ = parse_asset_uri(uri)
@@ -65,6 +67,8 @@ module Sprockets
       else
         resolve_without_compat(path, options)
       end
+      puts "#{Time.now - start}"
+      res
     end
     alias_method :resolve_without_compat, :resolve
     alias_method :resolve, :resolve_with_compat
